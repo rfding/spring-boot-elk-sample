@@ -1,0 +1,30 @@
+server:
+  port: 8888
+
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        web: INFO
+#      hibernate: ERROR
+#    hello: DEBUG
+#  file: logs/spring-boot-logging.log
+#  config: src/main/resources/logback-spring.xml
+logging:
+  file: logs/spring-boot-logging.log
+
+#TODO: figure out why I need this here and in bootstrap.yml
+spring:
+  application:
+    name: testLatticeApp
+
+ribbon:
+  ServerListRefreshInterval: 1000
+
+endpoints:
+  health:
+    sensitive: false
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
