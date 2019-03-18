@@ -1,73 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <!--<include resource="org/springframework/boot/logging/logback/base.xml"/>-->
-    <!--<logger name="hello" level="DEBUG" additivity="false">-->
-        <!--<appender-ref ref="CONSOLE"/>-->
-        <!--<appender-ref ref="FILE"/>-->
-    <!--</logger>-->
-
-    <!--<appender name="ES" class="ch.qos.logback.ext.loggly.LogglyAppender">-->
-        <!--<endpointUrl>http://logstash.test/tests/test?pipeline=logback</endpointUrl>-->
-        <!--<pattern>%m</pattern>-->
-    <!--</appender>-->
-    <!--<logger name="es" level="INFO" additivity="false">-->
-        <!--<appender-ref ref="ES"/>-->
-    <!--</logger>-->
-
-    <!--<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">-->
-        <!--<encoder class="net.logstash.logback.encoder.LogstashEncoder"/>-->
-    <!--</appender>-->
-    <!--<logger name="jsonLogger" additivity="false" level="DEBUG">-->
-        <!--<appender-ref ref="consoleAppender"/>-->
-    <!--</logger>-->
-    <!--<root level="INFO">-->
-        <!--<appender-ref ref="consoleAppender"/>-->
-    <!--</root>-->
+    <property resource="logging.properties" />
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            <Pattern>${STDOUT_PATTERN}</Pattern>
         </layout>
-    </appender>
-
-    <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
-        <syslogHost>127.0.0.1</syslogHost>
-        <facility>LOCAL0</facility>
-        <port>514</port>
-        <throwableExcluded>true</throwableExcluded>
-        <suffixPattern>gs-rest-service %m thread:%t priority:%p category:%c exception:%exception</suffixPattern>
     </appender>
 
     <appender name="FILEROLLING"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <append>true</append>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>/tmp/rolling-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <maxFileSize>1024KB</maxFileSize>
-            <maxHistory>7</maxHistory>
-            <totalSizeCap>10GB</totalSizeCap>
+            <fileNamePattern>${FILE_NAMEPATTERN}</fileNamePattern>
+            <maxFileSize>${FILE_MAXSIZE}</maxFileSize>
+            <maxHistory>${FILE_MAXHISTORY}</maxHistory>
+            <totalSizeCap>${FILE_SIZECAP}</totalSizeCap>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            <Pattern>${FILEROLLING_PATTERN}</Pattern>
         </encoder>
     </appender>
 
-    <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>logstash:5000</destination>
-
-        <!-- encoder is required -->
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${LOGSTASH_HOST}</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 
     <logger name="hello" level="debug" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILEROLLING" />
-        <appender-ref ref="SYSLOG" />
-        <appender-ref ref="stash" />
+        <appender-ref ref="STASH" />
     </logger>
 
-    <root level="DEBUG">
+    <root level="WARN">
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="stash" />
     </root>
 </configuration>
