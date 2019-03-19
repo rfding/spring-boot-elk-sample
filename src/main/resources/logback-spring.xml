@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property resource="logging.properties" />
+    <springProperty name="STDOUT_PATTERN" source="stdout.pattern"/>
+    <springProperty name="FILE_NAMEPATTERN" source="file.namepattern"/>
+    <springProperty name="FILE_MAXSIZE" source="file.maxsize"/>
+    <springProperty name="FILE_MAXHISTORY" source="file.maxhistory"/>
+    <springProperty name="FILE_SIZECAP" source="file.sizecap"/>
+    <springProperty name="FILEROLLING_PATTERN" source="filerolling.pattern"/>
+    <springProperty name="LOGSTASH_HOST" source="logstash.host"/>
+    <springProperty name="LOGGER_NAME" source="logger.name"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -27,13 +34,13 @@
         <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 
-    <logger name="hello" level="debug" additivity="false">
+    <logger name="${LOGGER_NAME}" level="${LOGGER_LEVEL:-DEBUG}" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILEROLLING" />
         <appender-ref ref="STASH" />
     </logger>
 
-    <root level="WARN">
+    <root level="${ROOT_LEVEL:-WARN}">
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>

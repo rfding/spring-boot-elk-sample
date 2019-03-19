@@ -6,8 +6,6 @@ services:
     image: test/test
     networks:
       - proxy
-#    environment:
-#      LOGGING_CONFIG: /app/logback-spring.xml
     deploy:
       mode: replicated
       replicas: 1

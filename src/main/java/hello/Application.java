@@ -19,6 +19,7 @@ public class Application {
         logger.info("This is an info message");
         logger.warn("This is a warn message");
         logger.error("This is an error message");
+        new SpringLoggingHelper().helpMethod();
         return "Hello Docker World";
     }
 
